@@ -1,0 +1,15 @@
+FROM golang:1.21 as base
+
+COPY . /app
+
+RUN go mod download
+
+RUN o build -o /bin/app
+
+FROM alpine:latest as final
+
+COPY --from=base /bin/app /bin/app
+
+EXPOSE 8080
+
+CMD ["/bin/app"]
